@@ -12,7 +12,7 @@ function _hideHello() {
 
 function _showHello() {
     if (!text) {
-        text = new St.Label({ style_class: 'helloworld-label', text: "Hello, world!" });
+        text = new St.Label({ style_class: 'helloworld-label', text: "Hello!" });
         Main.uiGroup.add_actor(text);
     }
 
