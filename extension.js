@@ -3,6 +3,10 @@ const St = imports.gi.St;
 const Main = imports.ui.main;
 const Tweener = imports.ui.tweener;
 
+const ExtensionUtils = imports.misc.extensionUtils;
+const Me = ExtensionUtils.getCurrentExtension();
+const Lib = Me.imports.convenience
+
 let text, button;
 
 function _hideHello() {
@@ -37,8 +41,8 @@ function init() {
                           x_fill: true,
                           y_fill: false,
                           track_hover: true });
-    let icon = new St.Icon({ icon_name: 'system-run-symbolic',
-                             style_class: 'system-status-icon' });
+    let icon = new St.Icon({ gicon: Lib.TopBarIcon,
+                             icon_size: 16 });
 
     button.set_child(icon);
     button.connect('button-press-event', _showHello);
