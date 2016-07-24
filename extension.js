@@ -9,7 +9,7 @@ const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
 const Lib = Me.imports.convenience;
 
-let text, button;
+let button;
 
 /*function _hideHello() {
     Main.uiGroup.remove_actor(text);
@@ -50,28 +50,6 @@ function init() {
     button.connect('button-press-event', _showHello);
 }*/
 
-const AVS_Indicator = new Lang.Class({
-    Name: 'AVS.Indicator',
-    Extends: PanelMenu.Button,
-
-    _init: function () {
-        this.parent(null, 'AVS-indicator');
-    },
-
-    _showMenu: function(){
-
-    },
-
-    _enable: function() {
-
-
-    },
-
-    _disable: function() {
-
-    }
-});
-
 function _showOptions(){
 
 }
@@ -87,7 +65,7 @@ function init(){
         icon_size: 16 });
 
     button.set_child(icon);
-    button.connect('button-press-event', _showHello);
+    button.connect('button-press-event', _showOptions);
 }
 
 function enable() {
