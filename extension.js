@@ -65,54 +65,48 @@ const AVS_Indicator = new Lang.Class({
         this.actor.connect(
             'button_press_event', Lang.bind(this, this._onButtonPress, false));
 
-        this.indicatorBox = new St.BoxLayout;
+        this.button = new St.Bin({ style_class: 'panel-button',
+            reactive: true,
+            can_focus: true,
+            x_fill: true,
+            y_fill: false,
+            track_hover: true });
         this.indicatorIcon = new St.Icon({
             gicon: Lib.TopBarIcon,
             icon_size: 16
         });
-        this.indicatorBox.add_actor(this.indicatorIcon);
-        this.actor.add_actor(this.indicatorBox);
-    },
-
-    _onButtonPress: function(actor, event) {
-        let button = event.get_button();
-
-        if (button === 1) {
-            _showMenu();
-        }
+        this.button.set_child(this.indicatorIcon);
+        this.button.connect('button-press-event', _showOptions);
     },
 
     _showMenu: function(){
-        if (this.visibleMenu === null || this.visibleMenu === undefined) {
-            this.visibleMenu = new PopupMenu.PopupSubMenuMenuItem(
-                _('test'), true);
-        }else{
-            this.visibleMenu.menu.removeAll();
-        }
 
-        this.menu.addMenuItem(this.visibleMenu);
-    }
+    },
 
     _enable: function() {
-        this.actor.add_actor(this.indicatorBox);
+
+        Main.panel._rightBox.insert_child_at_index(button, 0);
     },
 
     _disable: function() {
-        this.actor.remove_actor(this.indicatorBox);
+        Main.panel._rightBox.remove_child(button);
     }
 });
 
+function _showOptions(){
+
+}
+
 function init(){
-    indicator = new AVS_Indicator();
-    Main.panel.addToStatusArea('AVS-indicator', indicator);
-    indicator._enable();
+
+    //indicator._enable();
 }
 
 function enable() {
     //Main.panel._rightBox.insert_child_at_index(button, 0);
     if (indicator === null || indicator === undefined) {
         indicator = new AVS_Indicator();
-        Main.panel.addToStatusArea('AVS-indicator', indicator);
+        //Main.panel.addToStatusArea('AVS-indicator', indicator);
     }
 
     indicator._enable();
