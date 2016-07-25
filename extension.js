@@ -1,87 +1,84 @@
 
 const St = imports.gi.St;
 const Main = imports.ui.main;
-const Tweener = imports.ui.tweener;
 const Lang = imports.lang;
 const PanelMenu = imports.ui.panelMenu;
+const PopupMenu = imports.ui.popupMenu;
+const Gio = imports.gi.Gio;
 
 const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
 const Lib = Me.imports.convenience;
+const ScrollablePopupMenu = Me.imports.scrollablePopupMenu.ScrollablePopupMenu;
+const PopupExtensionItem = Me.imports.popupExtensionItem.PopupExtensionItem;
+const TrainItem = Me.imports.trainItem;
 
-let button;
+let superManager;
 
-/*function _hideHello() {
-    Main.uiGroup.remove_actor(text);
-    text = null;
-}
+const SuperManager = new Lang.Class({
+    Name: 'SuperManager',
+    Extends: PanelMenu.Button,
 
-function _showHello() {
-    if (!text) {
-        text = new St.Label({ style_class: 'helloworld-label', text: "Hello!" });
-        Main.uiGroup.add_actor(text);
+    _init: function () {
+        PanelMenu.Button.prototype._init.call(this, St.Align.START, 'superManager', true);
+
+        this.popupMenuItem = new ScrollablePopupMenu(this.actor, St.Align.START, St.Side.TOP);
+
+        this.setMenu(this.popupMenuItem);
+
+        let hbox = new St.BoxLayout({style_class: 'panel-status-menu-box' });
+        let icon = new St.Icon({gicon: Lib.TopBarIcon, icon_name: 'button-symbolic', style_class: 'system-status-icon'});
+        hbox.add_child(icon);
+
+        this.actor.add_actor(hbox);
+        this.actor.add_style_class_name('panel-status-button');
+
+        this.actor.connect('button-press-event', Lang.bind(this, function() {
+            this._refresh();
+        }));
+
+        Main.panel.addToStatusArea('extensions', this);
+
+        //this.menu.trainSection.add((new PopupMenu.PopupSeparatorMenuItem()).actor);
+
+        let trainButton = new PopupMenu.PopupMenuItem(_("Train Keyword"));
+
+        trainButton.connect('activate', Lang.bind(this, function(object, event) {
+
+        }));
+
+        this.menu.trainSection.add(trainButton.actor);
+
+        let trainItem = new TrainItem();
+        this.menu.addMenuItem(trainItem);
+
+        this._refresh();
+    },
+
+    _refresh: function() {
+        /*this.menu.removeAll();
+        let uuids = Object.keys(ExtensionUtils.extensions);
+
+        uuids.sort(function(a, b) {
+            a = ExtensionUtils.extensions[a].metadata.name;
+            b = ExtensionUtils.extensions[b].metadata.name;
+
+            return a < b ? -1 : (a > b ? 1 : 0);
+        });
+
+        uuids.forEach(Lang.bind(this, function(uuid) {
+            let item = new PopupExtensionItem(uuid);
+            this.menu.addMenuItem(item);
+        }));*/
+        return true;
     }
-
-    text.opacity = 255;
-
-    let monitor = Main.layoutManager.primaryMonitor;
-
-    text.set_position(monitor.x + Math.floor(monitor.width / 2 - text.width / 2),
-                      monitor.y + Math.floor(monitor.height / 2 - text.height / 2));
-
-    Tweener.addTween(text,
-                     { opacity: 0,
-                       time: 2,
-                       transition: 'easeOutQuad',
-                       onComplete: _hideHello });
-}
-
-function init() {
-    button = new St.Bin({ style_class: 'panel-button',
-                          reactive: true,
-                          can_focus: true,
-                          x_fill: true,
-                          y_fill: false,
-                          track_hover: true });
-    let icon = new St.Icon({ gicon: Lib.TopBarIcon,
-                             icon_size: 16 });
-
-    button.set_child(icon);
-    button.connect('button-press-event', _showHello);
-}*/
-
-function _showOptions(){
-
-}
-
-function init(){
-    button = new St.Bin({ style_class: 'panel-button',
-        reactive: true,
-        can_focus: true,
-        x_fill: true,
-        y_fill: false,
-        track_hover: true });
-    let icon = new St.Icon({ gicon: Lib.TopBarIcon,
-        icon_size: 16 });
-
-    button.set_child(icon);
-    button.connect('button-press-event', _showOptions);
-}
+});
 
 function enable() {
-    /*if (indicator === null || indicator === undefined) {
-        indicator = new AVS_Indicator();
-        //Main.panel.addToStatusArea('AVS-indicator', indicator);
-    }*/
-
-    Main.panel._rightBox.insert_child_at_index(button, 0);
+    superManager = new SuperManager();
 }
 
 function disable() {
-    /*if (indicator !== null) {
-        indicator._disable();
-        indicator = null;
-    }*/
-
-    Main.panel._rightBox.remove_child(button);
+    superManager.destroy();
+    superManager = null;
 }
