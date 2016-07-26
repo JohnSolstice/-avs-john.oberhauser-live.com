@@ -15,7 +15,7 @@ const PopupExtensionItem = new Lang.Class({
     _init: function(uuid, params) {
         this.parent(params);
 
-        this._extension = ExtensionUtils.extensions[uuid]
+        this._extension = ExtensionUtils.extensions[uuid];
 
         this.label = new St.Label({ text: this._extension.metadata.name });
 
@@ -44,7 +44,7 @@ const PopupExtensionItem = new Lang.Class({
         this._switch = new PopupMenu.Switch(this._extension.state == ExtensionSystem.ExtensionState.ENABLED);
 
         if(ExtensionUtils.isOutOfDate(this._extension))
-            this.setSensitive(false)
+            this.setSensitive(false);
 
         statusBin.child = this._switch.actor;
 

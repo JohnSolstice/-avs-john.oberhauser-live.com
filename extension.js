@@ -4,14 +4,11 @@ const Main = imports.ui.main;
 const Lang = imports.lang;
 const PanelMenu = imports.ui.panelMenu;
 const PopupMenu = imports.ui.popupMenu;
-const Gio = imports.gi.Gio;
 
 const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
 const Lib = Me.imports.convenience;
 const ScrollablePopupMenu = Me.imports.scrollablePopupMenu.ScrollablePopupMenu;
-const PopupExtensionItem = Me.imports.popupExtensionItem.PopupExtensionItem;
-const TrainItem = Me.imports.trainItem;
 
 let superManager;
 
@@ -33,13 +30,7 @@ const SuperManager = new Lang.Class({
         this.actor.add_actor(hbox);
         this.actor.add_style_class_name('panel-status-button');
 
-        this.actor.connect('button-press-event', Lang.bind(this, function() {
-            this._refresh();
-        }));
-
         Main.panel.addToStatusArea('extensions', this);
-
-        //this.menu.trainSection.add((new PopupMenu.PopupSeparatorMenuItem()).actor);
 
         let trainButton = new PopupMenu.PopupMenuItem(_("Train Keyword"));
 
@@ -49,28 +40,11 @@ const SuperManager = new Lang.Class({
 
         this.menu.trainSection.add(trainButton.actor);
 
-        let trainItem = new TrainItem();
+        let trainItem = new PopupMenu.PopupMenuItem('Start Training');
+        trainItem.connect('activate', Lang.bind(this, function(object, event){
+
+        }));
         this.menu.addMenuItem(trainItem);
-
-        this._refresh();
-    },
-
-    _refresh: function() {
-        /*this.menu.removeAll();
-        let uuids = Object.keys(ExtensionUtils.extensions);
-
-        uuids.sort(function(a, b) {
-            a = ExtensionUtils.extensions[a].metadata.name;
-            b = ExtensionUtils.extensions[b].metadata.name;
-
-            return a < b ? -1 : (a > b ? 1 : 0);
-        });
-
-        uuids.forEach(Lang.bind(this, function(uuid) {
-            let item = new PopupExtensionItem(uuid);
-            this.menu.addMenuItem(item);
-        }));*/
-        return true;
     }
 });
 
